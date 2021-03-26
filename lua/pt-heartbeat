@@ -1,0 +1,13 @@
+# Heartbeat Schema
+CREATE TABLE heartbeat (
+  ts                    varchar(26) NOT NULL,
+  server_id             int unsigned NOT NULL,
+  file                  varchar(255) DEFAULT NULL,
+  position              bigint unsigned DEFAULT NULL,
+  relay_master_log_file varchar(255) DEFAULT NULL,
+  exec_master_log_pos   bigint unsigned DEFAULT NULL
+);
+
+INSERT INTO heartbeat (ts, server_id) VALUES (NOW(), 1);
+
+SELECT ROUND(( ROUND(UNIX_TIMESTAMP(Now(6)) * 1000000) - (UNIX_TIMESTAMP(SUBSTR(ts, 1, 19)) * 1000000 + SUBSTR(ts, 21, 6))) / 1000) AS replica_lag_milli FROM heartbeat ORDER BY ts DESC LIMIT 1;
