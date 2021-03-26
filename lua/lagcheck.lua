@@ -1,6 +1,6 @@
 local function pick_backend(txn)
     local db_driver = require "luasql.mysql"
-    local lag_threshold = 3000 -- milliseconds
+    local lag_threshold = 20000 -- milliseconds
     local fe_name = txn.f:fe_name()
 
     -- default backend
@@ -15,7 +15,7 @@ local function pick_backend(txn)
                     -- create connection to MySQL
                     local host, port = server:get_addr():match("([^:]+):([^:]+)")
                     local conn = env:connect('api', 'root', '', host, port)
-                    core.Debug('checking replication lag for: ' .. server_name)
+                    core.Debug('checking replication lag for: ' .. backend.name)
                     core.Debug('server-addr: ' .. host .. "-" .. port)
 
                     -- if connection failed then return default backend
@@ -37,6 +37,7 @@ local function pick_backend(txn)
         end
     end
 
+    core.Debug('selected backend: ' .. selected_backend)
     return selected_backend
 end
 
