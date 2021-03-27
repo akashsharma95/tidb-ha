@@ -8,4 +8,4 @@ docker run --rm -d --name mysql-secondary -p 4001:3306 -e ALLOW_EMPTY_PASSWORD=y
 docker build -t haproxy -f Dockerfile .
 
 # run ha-proxy
-docker run --rm -d --name mysql-haproxy-lb --link mysql-primary:mysql-primary --link mysql-secondary:mysql-secondary -p 4002:4002 -p 8404:8404 haproxy:latest
+docker run --rm -d --name mysql-haproxy-lb --link mysql-primary:mysql-primary --link mysql-secondary:mysql-secondary -p 4002:4002 -p 8080:8080 haproxy:latest
